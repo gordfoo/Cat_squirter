@@ -144,12 +144,12 @@ def trigger_speaker():
     duty_cycle_percentage = 50 #Has to do with waveform. 50 usually works best
     
     pulse_time = 1 / pulse_size
-    pulses = duration / pulse_time
+    pulses = round(duration / pulse_time)
     
     pwm = GPIO.PWM(SPEAKER_PIN, frequency)
     
-    for _ in range pulses:
-        pwm.start(volume)
+    for _ in range(pulses):
+        pwm.start(duty_cycle_percentage)
         time.sleep(pulse_time)
         pwm.stop()
         time.sleep(pulse_time)
