@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 from time import sleep
 import cv2
-import datetime.date.today as today
+import datetime
 import RPi.GPIO as GPIO
 import time
 import threading
@@ -13,7 +13,8 @@ SQUIRTER_PIN = 14
 IR_SENSOR_PIN = 24
 
 number = 18
-print(number)
+
+today = datetime.date.today()
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
@@ -23,13 +24,13 @@ GPIO.setup(IR_SENSOR_PIN, GPIO.IN)
 GPIO.setmode(GPIO.BCM)
 
 classNames = []
-classFile = "/home/gordfoo/Desktop/Object_Detection_Files/coco.names"
+classFile = "coco.names"
 
 with open(classFile,"rt") as f:
     classNames = f.read().rstrip("\n").split("\n")
 
-configPath = "/home/gordfoo/Desktop/Object_Detection_Files/ssd_mobilenet_v3_large_coco_2020_01_14.pbtxt"
-weightsPath = "/home/gordfoo/Desktop/Object_Detection_Files/frozen_inference_graph.pb"
+configPath = "ssd_mobilenet_v3_large_coco_2020_01_14.pbtxt"
+weightsPath = "frozen_inference_graph.pb"
 
 net = cv2.dnn_DetectionModel(weightsPath,configPath)
 net.setInputSize(320,320)
@@ -37,7 +38,8 @@ net.setInputScale(1.0/ 127.5)
 net.setInputMean((127.5, 127.5, 127.5))
 net.setInputSwapRB(True)
 
-def getObjects(img, THRES, nms, draw=True, objects=['cat']):
+def getObjects(img, thres, nms, draw=True, objects=['cat']):
+    print(img.shape)
     classIds, confs, bbox = net.detect(img,confThreshold=thres,nmsThreshold=nms)
     #print(classIds,bbox)
     if len(objects) == 0: objects = classNames
@@ -182,6 +184,8 @@ if __name__ == "__main__":
     while (True):
         if GPIO.input(24):
             trigger_camera()
+        current_time = time.time()
+        print(f'Check occured at {current_time}')
         sleep(0.5)
         
     
