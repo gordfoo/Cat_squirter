@@ -83,10 +83,10 @@ def activate_speaker():
     #time.sleep(0.5)
 
 def activate_solenoid():
-    time.sleep()  # Wait for 1 second after beeping starts
-    GPIO.output(RELAY_PIN, GPIO.HIGH)
+    time.sleep(2)  # Wait for 1 second after beeping starts
+    GPIO.output(RELAY_PIN, 1)
     time.sleep(1.5)
-    GPIO.output(RELAY_PIN, GPIO.LOW)
+    GPIO.output(RELAY_PIN, 0)
     
 # Function to decode predictions
 def decode_predictions(predictions, top=5):
