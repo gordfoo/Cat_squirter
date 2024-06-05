@@ -5,6 +5,7 @@ import RPi.GPIO as GPIO
 import time
 from picamera import PiCamera
 import threading
+import datetime
 
 # Setup GPIO pins
 GPIO.setmode(GPIO.BCM)
@@ -109,8 +110,14 @@ def thread_solenoid_and_speaker_process():
     camera_thread.join()
 
 def save_image_process():
-    image = np.empty((224, 224, 3), dtype=np.uint8)
-    camera.capture(image, 'rgb')
+    time.sleep(2.3)
+    camera.resolution = (1024, 1024)
+    today = datetime.date.today()
+    time_now = time.time()
+    filename = f'Cat_pic_{today}_{time_now}.jpeg'
+    camera.capture(filename)
+    camera.resolution = (224, 224)
+    print(f'Image {filename} Saved')
     #return image
 
 def main():
